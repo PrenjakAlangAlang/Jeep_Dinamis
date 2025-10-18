@@ -114,6 +114,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .error{background:#f8d7da;color:#721c24;padding:8px;border-radius:6px;margin-bottom:12px}
         .image-preview{max-width:220px;margin-top:8px;border-radius:6px}
         .top-actions{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+        @media (max-width: 800px) {
+            .container{padding:12px;margin:12px}
+            .top-actions{flex-direction:column;align-items:flex-start;gap:8px}
+            .btn{padding:8px 10px}
+        }
     </style>
 </head>
 <body>

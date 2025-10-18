@@ -31,14 +31,25 @@ $gallery_count = $db->query("SELECT COUNT(*) FROM gallery")->fetchColumn();
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f5f5f5;
         }
-        .sidebar {
-            width: 250px;
+        .topnav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
             background: #1A3C40;
             color: white;
-            height: 100vh;
-            position: fixed;
-            padding: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 20px;
+            z-index: 1200;
         }
+        .topnav .brand { display:flex; align-items:center; gap:10px; }
+        .topnav .brand h2 { color: #FF6B35; margin:0; font-size:18px; }
+        .topnav .menu { display:flex; gap:6px; align-items:center; }
+        .topnav .menu a { color: white; text-decoration: none; padding:8px 12px; border-radius:6px; font-weight:600; }
+        .topnav .menu a.active, .topnav .menu a:hover { background: #FF6B35; color: #fff; }
         .sidebar-header {
             padding: 0 20px 20px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -64,8 +75,7 @@ $gallery_count = $db->query("SELECT COUNT(*) FROM gallery")->fetchColumn();
             margin-right: 10px;
         }
         .main-content {
-            margin-left: 250px;
-            padding: 20px;
+            padding: 90px 20px 20px; /* account for topnav height */
         }
         .header {
             background: white;
@@ -120,24 +130,33 @@ $gallery_count = $db->query("SELECT COUNT(*) FROM gallery")->fetchColumn();
         .logout:hover {
             background: #c82333;
         }
+        /* Responsive helpers copied from admins.php */
+        .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+        @media (max-width: 800px) {
+            .main-content { margin-left: 0; padding: 14px; }
+            .header { padding: 14px; }
+            .stat-card { padding: 12px; }
+            .btn { padding: 8px 10px; font-size: 14px; }
+        }
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <div class="sidebar-header">
+    <header class="topnav">
+        <div class="brand">
             <h2>Jeep Adventure</h2>
-            <p>Admin Panel</p>
+            <small style="color:#fff;opacity:0.85">Admin Panel</small>
         </div>
-        <ul class="sidebar-menu">
-            <li><a href="dashboard.php" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li><a href="profile.php"><i class="fas fa-building"></i> Profil Perusahaan</a></li>
-            <li><a href="admins.php"><i class="fas fa-users-cog"></i> Admins</a></li>
-            <li><a href="packages.php"><i class="fas fa-box"></i> Paket Tour</a></li>
-            <li><a href="gallery.php"><i class="fas fa-images"></i> Galeri</a></li>
-            <li><a href="contacts.php"><i class="fas fa-address-book"></i> Kontak</a></li>
-            <li><a href="logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-        </ul>
-    </div>
+        <nav class="menu">
+            <a href="dashboard.php" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="profile.php"><i class="fas fa-building"></i> Profil</a>
+            <a href="admins.php"><i class="fas fa-users-cog"></i> Admins</a>
+            <a href="packages.php"><i class="fas fa-box"></i> Paket</a>
+            <a href="gallery.php"><i class="fas fa-images"></i> Galeri</a>
+            <a href="contacts.php"><i class="fas fa-address-book"></i> Kontak</a>
+            <a href="logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </nav>
+    </header>
     
     <div class="main-content">
         <div class="header">

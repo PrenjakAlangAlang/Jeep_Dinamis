@@ -996,6 +996,82 @@ if ($profile && !empty($profile['hero_image'])) {
                 font-size: 24px; /* adjusted for mobile */
             }
         }
+
+        /* Login button (header) */
+        .login-button {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255,255,255,0.15);
+            padding: 8px 16px;
+            border-radius: 24px;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            display: inline-flex;
+            gap: 8px;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.22s ease;
+        }
+
+        .login-button:hover {
+            background: rgba(255,107,53,0.12);
+            border-color: rgba(255,107,53,0.9);
+            transform: translateY(-2px);
+            color: #fff;
+        }
+
+        /* Modal styles */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background: #fff;
+            width: 100%;
+            max-width: 420px;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+            overflow: hidden;
+            transform: translateY(8px);
+            transition: transform 0.18s ease, opacity 0.18s ease;
+        }
+
+        .modal-header {
+            padding: 18px 20px;
+            background: linear-gradient(90deg,var(--primary),var(--accent));
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body { padding: 20px; }
+
+        .modal-body .form-group { margin-bottom: 14px; }
+
+        .modal-body label { display:block; margin-bottom:6px; font-weight:600; color:#333; }
+
+        .modal-body input[type="text"], .modal-body input[type="password"] {
+            width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px;
+        }
+
+        .modal-actions { display:flex; gap:10px; margin-top:10px; }
+
+        .modal .btn { flex:1 }
+
+        .modal-close { background: transparent; border: none; color: white; font-size: 18px; cursor:pointer; }
+
+        body.modal-open { overflow: hidden; }
     </style>
 </head>
 <body>
@@ -1022,9 +1098,11 @@ if ($profile && !empty($profile['hero_image'])) {
                     <li><a href="#packages">Paket Lava Tour</a></li>
                     <li><a href="#gallery">Galeri</a></li>
                     <li><a href="#contact">Kontak</a></li>
+                    <li><a href="admin/login.php">Login Admin</a></li>
                 </ul>
             </nav>
             <a href="#packages" class="cta-button">Pesan Sekarang</a>
+            
         </div>
     </header>
 

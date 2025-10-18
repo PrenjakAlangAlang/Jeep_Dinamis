@@ -148,6 +148,27 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
         th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
         .message{background:#d4edda;color:#155724;padding:8px;border-radius:6px;margin-bottom:12px}
         .error{background:#f8d7da;color:#721c24;padding:8px;border-radius:6px;margin-bottom:12px}
+
+        /* Responsive helpers */
+        .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+        @media (max-width: 800px) {
+            .container{max-width:100%;margin:12px;padding:12px}
+            .card{padding:14px;border-radius:6px}
+            .btn{padding:8px 10px;font-size:14px}
+            table{font-size:13px}
+            th,td{padding:8px 6px}
+            h1{font-size:20px}
+            .form-group input{padding:9px}
+        }
+
+        @media (max-width: 480px) {
+            .container{margin:8px;padding:10px}
+            .card{padding:12px}
+            .btn{padding:8px 10px;font-size:13px}
+            table{font-size:12px}
+            th,td{padding:6px 4px}
+        }
     </style>
 </head>
 <body>
@@ -200,30 +221,32 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
 
         <div class="card" style="margin-top:16px">
             <h3>Daftar Admin</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Username</th>
-                        <?php if ($has_email): ?><th>Email</th><?php endif; ?>
-                        <?php if ($has_full_name): ?><th>Full Name</th><?php endif; ?>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach($admins as $a): ?>
+            <div class="table-wrap">
+                <table>
+                    <thead>
                         <tr>
-                            <td><?php echo $a['id']; ?></td>
-                            <td><?php echo htmlspecialchars($a['username']); ?></td>
-                            <?php if ($has_email): ?><td><?php echo htmlspecialchars($a['email'] ?? ''); ?></td><?php endif; ?>
-                            <?php if ($has_full_name): ?><td><?php echo htmlspecialchars($a['full_name'] ?? ''); ?></td><?php endif; ?>
-                            <td>
-                                <a href="admins.php?edit=<?php echo $a['id']; ?>" class="btn" style="background:#6c757d;padding:6px 10px">Edit</a>
-                            </td>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <?php if ($has_email): ?><th>Email</th><?php endif; ?>
+                            <?php if ($has_full_name): ?><th>Full Name</th><?php endif; ?>
+                            <th>Actions</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php foreach($admins as $a): ?>
+                            <tr>
+                                <td><?php echo $a['id']; ?></td>
+                                <td><?php echo htmlspecialchars($a['username']); ?></td>
+                                <?php if ($has_email): ?><td><?php echo htmlspecialchars($a['email'] ?? ''); ?></td><?php endif; ?>
+                                <?php if ($has_full_name): ?><td><?php echo htmlspecialchars($a['full_name'] ?? ''); ?></td><?php endif; ?>
+                                <td>
+                                    <a href="admins.php?edit=<?php echo $a['id']; ?>" class="btn" style="background:#6c757d;padding:6px 10px">Edit</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </body>
