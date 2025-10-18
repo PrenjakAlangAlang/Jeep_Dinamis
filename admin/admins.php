@@ -133,94 +133,448 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Manajemen Admin - Jeep Adventure</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Admin - Jeep Adventure Jogja</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body{font-family:Segoe UI, Tahoma, Geneva, Verdana, sans-serif;background:#f5f5f5;margin:0}
-        .container{max-width:900px;margin:30px auto;padding:20px}
-        .card{background:#fff;padding:20px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,0.06)}
-        .form-group{margin-bottom:12px}
-        input{width:100%;padding:10px;border:1px solid #ddd;border-radius:6px}
-        .btn{background:#FF6B35;color:#fff;padding:10px 14px;border-radius:6px;border:none;cursor:pointer}
-        table{width:100%;border-collapse:collapse;margin-top:12px}
-        th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
-        .message{background:#d4edda;color:#155724;padding:8px;border-radius:6px;margin-bottom:12px}
-        .error{background:#f8d7da;color:#721c24;padding:8px;border-radius:6px;margin-bottom:12px}
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: #f5f5f5; 
+        }
+        .topnav { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            height: 64px; 
+            background: #1A3C40; 
+            color: white; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 8px 20px; 
+            z-index: 1200; 
+        }
+        .topnav .brand { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+        }
+        .topnav .brand h2 { 
+            color: #FF6B35; 
+            margin: 0; 
+            font-size: 18px; 
+        }
+        .topnav .menu { 
+            display: flex; 
+            gap: 6px; 
+            align-items: center; 
+        }
+        .topnav .menu a { 
+            color: white; 
+            text-decoration: none; 
+            padding: 8px 12px; 
+            border-radius: 6px; 
+            font-weight: 600; 
+        }
+        .topnav .menu a.active, 
+        .topnav .menu a:hover { 
+            background: #FF6B35; 
+        }
+        
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+        }
+        .hamburger span {
+            height: 3px;
+            width: 25px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 900px) {
+            .topnav .menu {
+                position: fixed;
+                top: 64px;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: calc(100vh - 64px);
+                background: #1A3C40;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 20px;
+                transition: right 0.3s ease;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+                gap: 0;
+                overflow-y: auto;
+            }
+            
+            .topnav .menu.active {
+                right: 0;
+            }
+            
+            .topnav .menu a {
+                width: 100%;
+                padding: 12px 15px;
+                margin-bottom: 5px;
+                border-radius: 5px;
+                display: flex;
+                align-items: center;
+            }
+            
+            .topnav .menu a i {
+                width: 20px;
+                text-align: center;
+                margin-right: 10px;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+            
+            /* Hamburger Animation */
+            .hamburger.active span:nth-child(1) {
+                transform: rotate(-45deg) translate(-5px, 6px);
+            }
+            
+            .hamburger.active span:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .hamburger.active span:nth-child(3) {
+                transform: rotate(45deg) translate(-5px, -6px);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .topnav {
+                padding: 8px 15px;
+            }
+            
+            .topnav .brand h2 {
+                font-size: 16px;
+            }
+            
+            .topnav .brand small {
+                font-size: 12px;
+            }
+        }
 
-        /* Responsive helpers */
-        .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .main-content { 
+            padding: 90px 20px 20px; 
+        }
+        .header { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+            margin-bottom: 20px; 
+        }
+        .btn { 
+            background: #FF6B35; 
+            color: white; 
+            border: none; 
+            padding: 10px 15px; 
+            border-radius: 5px; 
+            text-decoration: none; 
+            display: inline-block; 
+            cursor: pointer; 
+            transition: background 0.3s; 
+        }
+        .btn:hover { 
+            background: #e55a2b; 
+        }
+        .btn-secondary {
+            background: #6c757d;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        .logout { 
+            background: #dc3545; 
+        }
+        .logout:hover { 
+            background: #c82333; 
+        }
+        .message { 
+            background: #d4edda; 
+            color: #155724; 
+            padding: 10px; 
+            border-radius: 5px; 
+            margin-bottom: 20px; 
+        }
+        .error { 
+            background: #f8d7da; 
+            color: #721c24; 
+            padding: 10px; 
+            border-radius: 5px; 
+            margin-bottom: 20px; 
+        }
+        .form-container { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+            margin-bottom: 20px; 
+        }
+        .table-container { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+        }
+        .form-group { 
+            margin-bottom: 15px; 
+        }
+        .form-group label { 
+            display: block; 
+            margin-bottom: 5px; 
+            font-weight: 600; 
+            color: #333; 
+        }
+        .form-group input, 
+        .form-group textarea, 
+        .form-group select { 
+            width: 100%; 
+            padding: 10px; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+            font-family: inherit; 
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+        tr:hover {
+            background: #f8f9fa;
+        }
+        .actions {
+            display: flex;
+            gap: 5px;
+        }
+        .btn-sm {
+            padding: 6px 10px;
+            font-size: 12px;
+        }
 
-        @media (max-width: 800px) {
-            .container{max-width:100%;margin:12px;padding:12px}
-            .card{padding:14px;border-radius:6px}
-            .btn{padding:8px 10px;font-size:14px}
-            table{font-size:13px}
-            th,td{padding:8px 6px}
-            h1{font-size:20px}
-            .form-group input{padding:9px}
+        /* Responsive Table */
+        .table-wrap { 
+            overflow-x: auto; 
+            -webkit-overflow-scrolling: touch; 
+        }
+
+        @media (max-width: 768px) {
+            .main-content { 
+                margin-left: 0; 
+                padding: 80px 14px 14px; 
+            }
+            .form-container, 
+            .table-container { 
+                padding: 14px; 
+            }
+            .btn { 
+                padding: 8px 10px; 
+                font-size: 14px; 
+            }
+            .form-grid {
+                grid-template-columns: 1fr !important;
+                gap: 0 !important;
+            }
+            
+            /* Stacked table for mobile */
+            table, thead, tbody, th, td, tr { 
+                display: block; 
+            }
+            thead { 
+                display: none; 
+            }
+            tbody tr { 
+                margin-bottom: 15px; 
+                background: #fff; 
+                border-radius: 8px; 
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                padding: 10px;
+                border: 1px solid #eee;
+            }
+            tbody td { 
+                display: flex; 
+                justify-content: space-between; 
+                align-items: center;
+                padding: 8px 6px; 
+                border-bottom: 1px solid #f5f5f5;
+            }
+            tbody td:last-child {
+                border-bottom: none;
+            }
+            tbody td .label { 
+                font-weight: 600; 
+                color: #666; 
+                margin-right: 10px;
+                min-width: 80px;
+            }
+            tbody td .value { 
+                text-align: right; 
+                color: #333; 
+                word-wrap: break-word;
+                flex: 1;
+            }
+            
+            /* Actions row */
+            tbody td.actions { 
+                display: flex;
+                justify-content: center;
+                gap: 8px;
+                padding-top: 10px;
+                border-top: 1px solid #eee;
+            }
+            tbody td.actions .btn { 
+                flex: 1;
+                text-align: center;
+            }
         }
 
         @media (max-width: 480px) {
-            .container{margin:8px;padding:10px}
-            .card{padding:12px}
-            .btn{padding:8px 10px;font-size:13px}
-            table{font-size:12px}
-            th,td{padding:6px 4px}
+            .main-content {
+                padding: 80px 10px 10px;
+            }
+            .header {
+                padding: 15px;
+            }
+            .form-container,
+            .table-container {
+                padding: 12px;
+            }
+            .actions {
+                flex-direction: column;
+            }
+            tbody td.actions {
+                flex-direction: column;
+            }
+            tbody td.actions .btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-            <h1>Manajemen Admin</h1>
-            <div>
-                <a href="dashboard.php" class="btn" style="background:#6c757d;margin-right:8px">Kembali</a>
-            </div>
+    <header class="topnav">
+        <div class="brand">
+            <h2>Jeep Adventure</h2>
+            <small style="color:#fff;opacity:0.85">Admin Panel</small>
         </div>
-        <?php if (!empty($message)): ?><div class="message"><?php echo $message; ?></div><?php endif; ?>
-        <?php if (!empty($error)): ?><div class="error"><?php echo $error; ?></div><?php endif; ?>
+        
+        <!-- Hamburger Menu Icon -->
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <nav class="menu" id="menu">
+            <a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="profile.php"><i class="fas fa-building"></i> Profil</a>
+            <a href="admins.php" class="active"><i class="fas fa-users-cog"></i> Admins</a>
+            <a href="packages.php"><i class="fas fa-box"></i> Paket</a>
+            <a href="gallery.php"><i class="fas fa-images"></i> Galeri</a>
+            <a href="contacts.php"><i class="fas fa-address-book"></i> Kontak</a>
+            <a href="logout.php" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </nav>
+    </header>
+    
+    <div class="main-content">
+        <div class="header">
+            <h1>Kelola Admin</h1>
+        </div>
+        
+        <?php if (!empty($message)): ?>
+            <div class="message"><?php echo $message; ?></div>
+        <?php endif; ?>
+        
+        <?php if (!empty($error)): ?>
+            <div class="error"><?php echo $error; ?></div>
+        <?php endif; ?>
 
-        <div class="card">
-            <h3><?php echo $editing ? 'Edit Profil Admin' : 'Tambah Admin Baru'; ?></h3>
+        <!-- Form Tambah/Edit Admin -->
+        <div class="form-container">
+            <h2 style="margin-bottom: 20px; color: #1A3C40;">
+                <?php echo $editing ? 'Edit Profil Admin' : 'Tambah Admin Baru'; ?>
+            </h2>
             <form method="POST" action="">
                 <?php if ($editing): ?>
                     <input type="hidden" name="edit_id" value="<?php echo (int)$edit_admin['id']; ?>">
                 <?php endif; ?>
-                <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" name="username" required value="<?php echo $editing ? htmlspecialchars($edit_admin['username']) : ''; ?>">
+                
+                <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Username *</label>
+                        <input type="text" name="username" required value="<?php echo $editing ? htmlspecialchars($edit_admin['username']) : ''; ?>">
+                    </div>
+                    
+                    <?php if ($has_email): ?>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" value="<?php echo $editing ? htmlspecialchars($edit_admin['email'] ?? '') : ''; ?>">
+                    </div>
+                    <?php endif; ?>
                 </div>
-                <?php if ($has_email): ?>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" name="email" value="<?php echo $editing ? htmlspecialchars($edit_admin['email'] ?? '') : ''; ?>">
-                </div>
-                <?php endif; ?>
+                
                 <?php if ($has_full_name): ?>
                 <div class="form-group">
-                    <label>Full Name</label>
+                    <label>Nama Lengkap</label>
                     <input type="text" name="full_name" value="<?php echo $editing ? htmlspecialchars($edit_admin['full_name'] ?? '') : ''; ?>">
                 </div>
                 <?php endif; ?>
-                <div class="form-group">
-                    <label>Password <?php echo $editing ? '(kosongkan jika tidak ingin mengganti)' : ''; ?></label>
-                    <input type="password" name="password" <?php echo $editing ? '' : 'required'; ?>>
+                
+                <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Password <?php echo $editing ? '(kosongkan jika tidak ingin mengganti)' : '*'; ?></label>
+                        <input type="password" name="password" <?php echo $editing ? '' : 'required'; ?>>
+                    </div>
+                    <div class="form-group">
+                        <label>Konfirmasi Password <?php echo $editing ? '(kosongkan jika tidak ingin mengganti)' : '*'; ?></label>
+                        <input type="password" name="password_confirm" <?php echo $editing ? '' : 'required'; ?>>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Konfirmasi Password</label>
-                    <input type="password" name="password_confirm" <?php echo $editing ? '' : 'required'; ?>>
+                
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button class="btn" type="submit">
+                        <?php echo $editing ? 'Simpan Perubahan' : 'Tambah Admin'; ?>
+                    </button>
+                    <?php if ($editing): ?>
+                        <a href="admins.php" class="btn btn-secondary">Batal</a>
+                    <?php endif; ?>
                 </div>
-                <button class="btn" type="submit"><?php echo $editing ? 'Simpan Perubahan' : 'Buat Admin'; ?></button>
-                <?php if ($editing): ?>
-                    <a href="admins.php" class="btn" style="background:#6c757d;margin-left:8px">Batal</a>
-                <?php endif; ?>
             </form>
         </div>
 
-        <div class="card" style="margin-top:16px">
-            <h3>Daftar Admin</h3>
+        <!-- Daftar Admin -->
+        <div class="table-container">
+            <h2 style="margin-bottom: 20px; color: #1A3C40;">Daftar Admin</h2>
             <div class="table-wrap">
                 <table>
                     <thead>
@@ -228,19 +582,37 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
                             <th>ID</th>
                             <th>Username</th>
                             <?php if ($has_email): ?><th>Email</th><?php endif; ?>
-                            <?php if ($has_full_name): ?><th>Full Name</th><?php endif; ?>
-                            <th>Actions</th>
+                            <?php if ($has_full_name): ?><th>Nama Lengkap</th><?php endif; ?>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach($admins as $a): ?>
+                        <?php foreach($admins as $admin): ?>
                             <tr>
-                                <td><?php echo $a['id']; ?></td>
-                                <td><?php echo htmlspecialchars($a['username']); ?></td>
-                                <?php if ($has_email): ?><td><?php echo htmlspecialchars($a['email'] ?? ''); ?></td><?php endif; ?>
-                                <?php if ($has_full_name): ?><td><?php echo htmlspecialchars($a['full_name'] ?? ''); ?></td><?php endif; ?>
                                 <td>
-                                    <a href="admins.php?edit=<?php echo $a['id']; ?>" class="btn" style="background:#6c757d;padding:6px 10px">Edit</a>
+                                    <span class="label">ID:</span>
+                                    <span class="value"><?php echo $admin['id']; ?></span>
+                                </td>
+                                <td>
+                                    <span class="label">Username:</span>
+                                    <span class="value"><?php echo htmlspecialchars($admin['username']); ?></span>
+                                </td>
+                                <?php if ($has_email): ?>
+                                <td>
+                                    <span class="label">Email:</span>
+                                    <span class="value"><?php echo htmlspecialchars($admin['email'] ?? ''); ?></span>
+                                </td>
+                                <?php endif; ?>
+                                <?php if ($has_full_name): ?>
+                                <td>
+                                    <span class="label">Nama Lengkap:</span>
+                                    <span class="value"><?php echo htmlspecialchars($admin['full_name'] ?? ''); ?></span>
+                                </td>
+                                <?php endif; ?>
+                                <td class="actions">
+                                    <a href="admins.php?edit=<?php echo $admin['id']; ?>" class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -249,5 +621,55 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
             </div>
         </div>
     </div>
+
+    <script>
+        // Toggle mobile menu
+        const hamburger = document.getElementById('hamburger');
+        const menu = document.getElementById('menu');
+        
+        hamburger.addEventListener('click', function() {
+            hamburger.classList.toggle('active');
+            menu.classList.toggle('active');
+        });
+        
+        // Close menu when clicking on a link
+        const menuLinks = document.querySelectorAll('.menu a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                hamburger.classList.remove('active');
+                menu.classList.remove('active');
+            });
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const isClickInsideMenu = menu.contains(event.target);
+            const isClickInsideHamburger = hamburger.contains(event.target);
+            
+            if (!isClickInsideMenu && !isClickInsideHamburger && menu.classList.contains('active')) {
+                hamburger.classList.remove('active');
+                menu.classList.remove('active');
+            }
+        });
+
+        // Password confirmation validation
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInput = document.querySelector('input[name="password"]');
+            const confirmInput = document.querySelector('input[name="password_confirm"]');
+            
+            function validatePasswords() {
+                if (passwordInput.value !== confirmInput.value) {
+                    confirmInput.style.borderColor = '#dc3545';
+                } else {
+                    confirmInput.style.borderColor = '#28a745';
+                }
+            }
+            
+            if (passwordInput && confirmInput) {
+                passwordInput.addEventListener('input', validatePasswords);
+                confirmInput.addEventListener('input', validatePasswords);
+            }
+        });
+    </script>
 </body>
 </html>

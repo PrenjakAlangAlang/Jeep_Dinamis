@@ -153,35 +153,274 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Kelola Profil - Jeep Adventure Jogja</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; }
-    .topnav { position: fixed; top: 0; left: 0; right: 0; height: 64px; background: #1A3C40; color: white; display:flex; align-items:center; justify-content:space-between; padding:8px 20px; z-index:1200; }
-    .topnav .brand { display:flex; align-items:center; gap:10px; }
-    .topnav .brand h2 { color:#FF6B35; margin:0; font-size:18px }
-    .topnav .menu { display:flex; gap:6px; align-items:center }
-    .topnav .menu a { color:white; text-decoration:none; padding:8px 12px; border-radius:6px; font-weight:600 }
-    .topnav .menu a.active, .topnav .menu a:hover { background:#FF6B35 }
-    .main-content { padding: 90px 20px 20px }
-        .header { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .btn { background: #FF6B35; color: white; border: none; padding: 10px 15px; border-radius: 5px; text-decoration: none; display: inline-block; cursor: pointer; transition: background 0.3s; }
-        .btn:hover { background: #e55a2b; }
-        .logout { background: #dc3545; }
-        .logout:hover { background: #c82333; }
-        .message { background: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
-        .error { background: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
-        .form-container { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #333; }
-        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; }
-        .form-group textarea { min-height: 100px; resize: vertical; }
-        .form-section { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
-        .form-section h3 { color: #1A3C40; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #FF6B35; }
-        .image-preview { max-width: 200px; margin-top: 10px; border-radius: 5px; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: #f5f5f5; 
+        }
+        .topnav { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            height: 64px; 
+            background: #1A3C40; 
+            color: white; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 8px 20px; 
+            z-index: 1200; 
+        }
+        .topnav .brand { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+        }
+        .topnav .brand h2 { 
+            color: #FF6B35; 
+            margin: 0; 
+            font-size: 18px; 
+        }
+        .topnav .menu { 
+            display: flex; 
+            gap: 6px; 
+            align-items: center; 
+        }
+        .topnav .menu a { 
+            color: white; 
+            text-decoration: none; 
+            padding: 8px 12px; 
+            border-radius: 6px; 
+            font-weight: 600; 
+        }
+        .topnav .menu a.active, 
+        .topnav .menu a:hover { 
+            background: #FF6B35; 
+        }
+        
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+        }
+        .hamburger span {
+            height: 3px;
+            width: 25px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 900px) {
+            .topnav .menu {
+                position: fixed;
+                top: 64px;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: calc(100vh - 64px);
+                background: #1A3C40;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 20px;
+                transition: right 0.3s ease;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+                gap: 0;
+                overflow-y: auto;
+            }
+            
+            .topnav .menu.active {
+                right: 0;
+            }
+            
+            .topnav .menu a {
+                width: 100%;
+                padding: 12px 15px;
+                margin-bottom: 5px;
+                border-radius: 5px;
+                display: flex;
+                align-items: center;
+            }
+            
+            .topnav .menu a i {
+                width: 20px;
+                text-align: center;
+                margin-right: 10px;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+            
+            /* Hamburger Animation */
+            .hamburger.active span:nth-child(1) {
+                transform: rotate(-45deg) translate(-5px, 6px);
+            }
+            
+            .hamburger.active span:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .hamburger.active span:nth-child(3) {
+                transform: rotate(45deg) translate(-5px, -6px);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .topnav {
+                padding: 8px 15px;
+            }
+            
+            .topnav .brand h2 {
+                font-size: 16px;
+            }
+            
+            .topnav .brand small {
+                font-size: 12px;
+            }
+        }
+        
+        .main-content { 
+            padding: 90px 20px 20px; 
+        }
+        .header { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+            margin-bottom: 20px; 
+        }
+        .btn { 
+            background: #FF6B35; 
+            color: white; 
+            border: none; 
+            padding: 10px 15px; 
+            border-radius: 5px; 
+            text-decoration: none; 
+            display: inline-block; 
+            cursor: pointer; 
+            transition: background 0.3s; 
+        }
+        .btn:hover { 
+            background: #e55a2b; 
+        }
+        .logout { 
+            background: #dc3545; 
+        }
+        .logout:hover { 
+            background: #c82333; 
+        }
+        .message { 
+            background: #d4edda; 
+            color: #155724; 
+            padding: 10px; 
+            border-radius: 5px; 
+            margin-bottom: 20px; 
+        }
+        .error { 
+            background: #f8d7da; 
+            color: #721c24; 
+            padding: 10px; 
+            border-radius: 5px; 
+            margin-bottom: 20px; 
+        }
+        .form-container { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+        }
+        .form-group { 
+            margin-bottom: 20px; 
+        }
+        .form-group label { 
+            display: block; 
+            margin-bottom: 5px; 
+            font-weight: 600; 
+            color: #333; 
+        }
+        .form-group input, 
+        .form-group textarea, 
+        .form-group select { 
+            width: 100%; 
+            padding: 10px; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+            font-family: inherit; 
+        }
+        .form-group textarea { 
+            min-height: 100px; 
+            resize: vertical; 
+        }
+        .form-section { 
+            margin-bottom: 30px; 
+            padding-bottom: 20px; 
+            border-bottom: 1px solid #eee; 
+        }
+        .form-section h3 { 
+            color: #1A3C40; 
+            margin-bottom: 15px; 
+            padding-bottom: 10px; 
+            border-bottom: 2px solid #FF6B35; 
+        }
+        .image-preview { 
+            max-width: 200px; 
+            margin-top: 10px; 
+            border-radius: 5px; 
+            border: 1px solid #ddd;
+        }
+        .image-upload-container {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        .image-upload-container .form-group {
+            flex: 1;
+        }
+        
         /* Responsive helpers */
         @media (max-width: 800px) {
-            .main-content { margin-left: 0; padding: 12px; }
-            .form-container { padding: 12px; }
-            .btn { padding: 8px 10px; font-size: 14px; }
+            .main-content { 
+                margin-left: 0; 
+                padding: 80px 14px 14px; 
+            }
+            .form-container { 
+                padding: 14px; 
+            }
+            .btn { 
+                padding: 8px 10px; 
+                font-size: 14px; 
+            }
+            .form-grid {
+                grid-template-columns: 1fr !important;
+                gap: 0 !important;
+            }
+            .image-upload-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .image-preview {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .form-section {
+                padding-bottom: 15px;
+                margin-bottom: 20px;
+            }
+            .form-group {
+                margin-bottom: 15px;
+            }
         }
     </style>
 </head>
@@ -191,7 +430,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <h2>Jeep Adventure</h2>
             <small style="color:#fff;opacity:0.85">Admin Panel</small>
         </div>
-        <nav class="menu">
+        
+        <!-- Hamburger Menu Icon -->
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <nav class="menu" id="menu">
             <a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
             <a href="profile.php" class="active"><i class="fas fa-building"></i> Profil</a>
             <a href="admins.php"><i class="fas fa-users-cog"></i> Admins</a>
@@ -241,11 +488,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <label>Deskripsi Hero</label>
                         <textarea name="hero_description" required><?php echo $profile ? htmlspecialchars($profile['hero_description']) : ''; ?></textarea>
                     </div>
-                    <div class="form-group">
-                        <label>Gambar Hero</label>
-                        <input type="file" name="hero_image" accept="image/*">
+                    <div class="image-upload-container">
+                        <div class="form-group">
+                            <label>Gambar Hero</label>
+                            <input type="file" name="hero_image" accept="image/*">
+                        </div>
                         <?php if ($profile && !empty($profile['hero_image'])): ?>
-                            <img src="../uploads/profiles/<?php echo htmlspecialchars($profile['hero_image']); ?>" class="image-preview">
+                            <img src="../uploads/profiles/<?php echo htmlspecialchars($profile['hero_image']); ?>" class="image-preview" id="hero-preview">
+                        <?php else: ?>
+                            <img src="" class="image-preview" id="hero-preview" style="display: none;">
                         <?php endif; ?>
                     </div>
                 </div>
@@ -253,7 +504,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <!-- Section Statistik -->
                 <div class="form-section">
                     <h3>Statistik</h3>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                         <div class="form-group">
                             <label>Jumlah Pelanggan</label>
                             <input type="text" name="stat_customers" value="<?php echo $profile ? htmlspecialchars($profile['stat_customers']) : ''; ?>">
@@ -292,11 +543,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <label>Konten Profil 2</label>
                         <textarea name="profile_content2"><?php echo $profile ? htmlspecialchars($profile['profile_content2']) : ''; ?></textarea>
                     </div>
-                    <div class="form-group">
-                        <label>Gambar Profil</label>
-                        <input type="file" name="profile_image" accept="image/*">
+                    <div class="image-upload-container">
+                        <div class="form-group">
+                            <label>Gambar Profil</label>
+                            <input type="file" name="profile_image" accept="image/*">
+                        </div>
                         <?php if ($profile && !empty($profile['profile_image'])): ?>
-                            <img src="../uploads/profiles/<?php echo htmlspecialchars($profile['profile_image']); ?>" class="image-preview">
+                            <img src="../uploads/profiles/<?php echo htmlspecialchars($profile['profile_image']); ?>" class="image-preview" id="profile-preview">
+                        <?php else: ?>
+                            <img src="" class="image-preview" id="profile-preview" style="display: none;">
                         <?php endif; ?>
                     </div>
                 </div>
@@ -304,7 +559,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <!-- Section Fitur -->
                 <div class="form-section">
                     <h3>Fitur Perusahaan</h3>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                         <div class="form-group">
                             <label>Fitur 1</label>
                             <input type="text" name="feature1" value="<?php echo $profile ? htmlspecialchars($profile['feature1']) : ''; ?>">
@@ -339,6 +594,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
     <script>
+        // Toggle mobile menu
+        const hamburger = document.getElementById('hamburger');
+        const menu = document.getElementById('menu');
+        
+        hamburger.addEventListener('click', function() {
+            hamburger.classList.toggle('active');
+            menu.classList.toggle('active');
+        });
+        
+        // Close menu when clicking on a link
+        const menuLinks = document.querySelectorAll('.menu a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                hamburger.classList.remove('active');
+                menu.classList.remove('active');
+            });
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const isClickInsideMenu = menu.contains(event.target);
+            const isClickInsideHamburger = hamburger.contains(event.target);
+            
+            if (!isClickInsideMenu && !isClickInsideHamburger && menu.classList.contains('active')) {
+                hamburger.classList.remove('active');
+                menu.classList.remove('active');
+            }
+        });
+
         // Preview image sebelum upload
         function previewImage(input, previewElement) {
             if (input.files && input.files[0]) {
@@ -353,12 +637,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Setup preview untuk semua file inputs
         document.addEventListener('DOMContentLoaded', function() {
+            const heroInput = document.querySelector('input[name="hero_image"]');
+            const profileInput = document.querySelector('input[name="profile_image"]');
+            const heroPreview = document.getElementById('hero-preview');
+            const profilePreview = document.getElementById('profile-preview');
+            
+            if (heroInput && heroPreview) {
+                heroInput.addEventListener('change', function() {
+                    previewImage(this, heroPreview);
+                });
+            }
+            
+            if (profileInput && profilePreview) {
+                profileInput.addEventListener('change', function() {
+                    previewImage(this, profilePreview);
+                });
+            }
+
+            // Validasi file upload
             const fileInputs = document.querySelectorAll('input[type="file"]');
             fileInputs.forEach(input => {
-                input.addEventListener('change', function() {
-                    const preview = this.nextElementSibling;
-                    if (preview && preview.tagName === 'IMG') {
-                        previewImage(this, preview);
+                input.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        // Validasi ukuran file (max 5MB)
+                        if (file.size > 5 * 1024 * 1024) {
+                            alert('Ukuran file maksimal 5MB');
+                            e.target.value = '';
+                            return;
+                        }
+                        
+                        // Validasi tipe file
+                        const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+                        if (!validTypes.includes(file.type)) {
+                            alert('Hanya file gambar (JPEG, PNG, GIF, WebP) yang diizinkan');
+                            e.target.value = '';
+                            return;
+                        }
                     }
                 });
             });

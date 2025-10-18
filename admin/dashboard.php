@@ -45,11 +45,120 @@ $gallery_count = $db->query("SELECT COUNT(*) FROM gallery")->fetchColumn();
             padding: 8px 20px;
             z-index: 1200;
         }
-        .topnav .brand { display:flex; align-items:center; gap:10px; }
-        .topnav .brand h2 { color: #FF6B35; margin:0; font-size:18px; }
-        .topnav .menu { display:flex; gap:6px; align-items:center; }
-        .topnav .menu a { color: white; text-decoration: none; padding:8px 12px; border-radius:6px; font-weight:600; }
-        .topnav .menu a.active, .topnav .menu a:hover { background: #FF6B35; color: #fff; }
+        .topnav .brand { 
+            display:flex; 
+            align-items:center; 
+            gap:10px; 
+        }
+        .topnav .brand h2 { 
+            color: #FF6B35; 
+            margin:0; 
+            font-size:18px; 
+        }
+        .topnav .menu { 
+            display:flex; 
+            gap:6px; 
+            align-items:center; 
+        }
+        .topnav .menu a { 
+            color: white; 
+            text-decoration: none; 
+            padding:8px 12px; 
+            border-radius:6px; 
+            font-weight:600; 
+        }
+        .topnav .menu a.active, .topnav .menu a:hover { 
+            background: #FF6B35; 
+            color: #fff; 
+        }
+        
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+        }
+        .hamburger span {
+            height: 3px;
+            width: 25px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 900px) {
+            .topnav .menu {
+                position: fixed;
+                top: 64px;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: calc(100vh - 64px);
+                background: #1A3C40;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 20px;
+                transition: right 0.3s ease;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+                gap: 0;
+                overflow-y: auto;
+            }
+            
+            .topnav .menu.active {
+                right: 0;
+            }
+            
+            .topnav .menu a {
+                width: 100%;
+                padding: 12px 15px;
+                margin-bottom: 5px;
+                border-radius: 5px;
+                display: flex;
+                align-items: center;
+            }
+            
+            .topnav .menu a i {
+                width: 20px;
+                text-align: center;
+                margin-right: 10px;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+            
+            /* Hamburger Animation */
+            .hamburger.active span:nth-child(1) {
+                transform: rotate(-45deg) translate(-5px, 6px);
+            }
+            
+            .hamburger.active span:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .hamburger.active span:nth-child(3) {
+                transform: rotate(45deg) translate(-5px, -6px);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .topnav {
+                padding: 8px 15px;
+            }
+            
+            .topnav .brand h2 {
+                font-size: 16px;
+            }
+            
+            .topnav .brand small {
+                font-size: 12px;
+            }
+        }
+        
+        /* Existing styles */
         .sidebar-header {
             padding: 0 20px 20px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -130,14 +239,30 @@ $gallery_count = $db->query("SELECT COUNT(*) FROM gallery")->fetchColumn();
         .logout:hover {
             background: #c82333;
         }
-        /* Responsive helpers copied from admins.php */
         .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
         @media (max-width: 800px) {
-            .main-content { margin-left: 0; padding: 14px; }
-            .header { padding: 14px; }
-            .stat-card { padding: 12px; }
-            .btn { padding: 8px 10px; font-size: 14px; }
+            .main-content { 
+                margin-left: 0; 
+                padding: 80px 14px 14px; 
+            }
+            .header { 
+                padding: 14px; 
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .stat-card { 
+                padding: 12px; 
+            }
+            .btn { 
+                padding: 8px 10px; 
+                font-size: 14px; 
+            }
+            .stats {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
         }
     </style>
 </head>
@@ -147,7 +272,15 @@ $gallery_count = $db->query("SELECT COUNT(*) FROM gallery")->fetchColumn();
             <h2>Jeep Adventure</h2>
             <small style="color:#fff;opacity:0.85">Admin Panel</small>
         </div>
-        <nav class="menu">
+        
+        <!-- Hamburger Menu Icon -->
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <nav class="menu" id="menu">
             <a href="dashboard.php" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
             <a href="profile.php"><i class="fas fa-building"></i> Profil</a>
             <a href="admins.php"><i class="fas fa-users-cog"></i> Admins</a>
@@ -177,12 +310,43 @@ $gallery_count = $db->query("SELECT COUNT(*) FROM gallery")->fetchColumn();
         
         <div class="quick-actions">
             <h2>Quick Actions</h2>
-            <div style="margin-top: 15px;">
+            <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
                 <a href="profile.php" class="btn">Edit Profil Perusahaan</a>
                 <a href="packages.php" class="btn">Kelola Paket Tour</a>
                 <a href="gallery.php" class="btn">Kelola Galeri</a>
             </div>
         </div>
     </div>
+    
+    <script>
+        // Toggle mobile menu
+        const hamburger = document.getElementById('hamburger');
+        const menu = document.getElementById('menu');
+        
+        hamburger.addEventListener('click', function() {
+            hamburger.classList.toggle('active');
+            menu.classList.toggle('active');
+        });
+        
+        // Close menu when clicking on a link
+        const menuLinks = document.querySelectorAll('.menu a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                hamburger.classList.remove('active');
+                menu.classList.remove('active');
+            });
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const isClickInsideMenu = menu.contains(event.target);
+            const isClickInsideHamburger = hamburger.contains(event.target);
+            
+            if (!isClickInsideMenu && !isClickInsideHamburger && menu.classList.contains('active')) {
+                hamburger.classList.remove('active');
+                menu.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>
