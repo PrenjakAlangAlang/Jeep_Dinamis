@@ -495,14 +495,32 @@ $packages = $stmt->fetchAll(PDO::FETCH_ASSOC);
             .table-container {
                 padding: 12px;
             }
+            /* On very small screens, keep action buttons in a horizontal row
+               so users can swipe left-to-right to access actions. */
             .action-buttons {
-                flex-direction: column;
+                display: flex;
+                flex-direction: row; /* left-to-right */
+                gap: 8px;
+                align-items: center;
+                overflow-x: auto; /* allow horizontal scroll if many buttons */
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 6px;
             }
             tbody td.actions {
-                flex-direction: column;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                gap: 8px;
+                padding-top: 10px;
+                border-top: 1px solid #eee;
+                justify-content: center; /* center action row */
+                align-items: center;
             }
             tbody td.actions .btn {
-                width: 100%;
+                flex: 0 0 auto; /* don't stretch full width */
+                min-width: 100px;
+                white-space: nowrap;
+                text-align: center;
             }
             .package-image {
                 width: 100%;
@@ -529,7 +547,7 @@ $packages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
     <header class="topnav">
         <div class="brand">
-            <h2>Jeep Adventure</h2>
+            <h2>Jeep Merapi Tripster</h2>
             <small style="color:#fff;opacity:0.85">Admin Panel</small>
         </div>
         

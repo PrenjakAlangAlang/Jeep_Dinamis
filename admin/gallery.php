@@ -439,7 +439,7 @@ $gallery = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
     <header class="topnav">
         <div class="brand">
-            <h2>Jeep Adventure</h2>
+            <h2>Jeep Merapi Tripster</h2>
             <small style="color:#fff;opacity:0.85">Admin Panel</small>
         </div>
         
